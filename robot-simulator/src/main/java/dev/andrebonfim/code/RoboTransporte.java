@@ -1,15 +1,10 @@
 package dev.andrebonfim.code;
 
-public class RoboTransporte {
-    private float posicaoX;
-    private float posicaoY;
-    private int orientacao;
+public class RoboTransporte extends Robo {
     static final int FRENTE = 0;
     static final int ATRAS = 1;
     static final int ESQUERDA = 2;
     static final int DIREITA = 3;
-    private final String nome;
-    private final float peso;
     private final float velocidadeMax = 5;
     private final float pesoCargaMax = 20;
     private final String tipoTracao = "esteira";
@@ -22,20 +17,6 @@ public class RoboTransporte {
         this.orientacao = FRENTE;
     }
 
-    public RoboTransporte(String nome) {
-        this.nome = nome;
-        this.peso = 10;
-        this.posicaoX = 50;
-        this.posicaoY = 50;
-    }
-
-    public RoboTransporte(String nome, float peso) {
-        this.nome = nome;
-        this.peso = peso;
-        this.posicaoX = 50;
-        this.posicaoY = 50;
-    }
-
     public RoboTransporte(String nome, float peso, float posX, float posY) {
         this.nome = nome;
         this.peso = peso;
@@ -43,35 +24,58 @@ public class RoboTransporte {
         this.posicaoY = posY;
     }
 
-    // Método para mover o robô para uma nova posição
-    public void move(float pos) {
-        this.posicaoY = pos;
-    }
-
+    @Override
     public void move(float x, float y) {
-        posicaoX = x;
-        posicaoY = y;
+        if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
+            throw new IllegalArgumentException("Posições não podem ser NaN ou infinitas.");
+        }
+        this.posicaoX = x;
+        this.posicaoY = y;
     }
 
-    // Métodos para obter a posição atual do robô
-    public float getPosicaoX() {
-        return this.posicaoX;
+    @Override
+    public void moveX(float dist) {
+        if (Float.isNaN(dist) || Float.isInfinite(dist)) {
+            throw new IllegalArgumentException("Distância não pode ser NaN ou infinita.");
+        }
+        this.posicaoX += dist;
     }
 
-    public float getPosicaoY() {
-        return this.posicaoY;
+    @Override
+    public void moveY(float dist) {
+        if (Float.isNaN(dist) || Float.isInfinite(dist)) {
+            throw new IllegalArgumentException("Distância não pode ser NaN ou infinita.");
+        }
+        this.posicaoY += dist;
     }
 
     public void setOrientacao(char tecla) {
-        if (tecla == 'w') {
-            this.orientacao = FRENTE;
-        } else if (tecla == 's') {
-            this.orientacao = ATRAS;
-        } else if (tecla == 'a') {
-            this.orientacao = ESQUERDA;
-        } else if (tecla == 'd') {
-            this.orientacao = DIREITA;
+        switch (tecla) {
+            case 'w':
+                this.orientacao = FRENTE;
+                moveY(velocidadeMax);
+                break;
+            case 's':
+                this.orientacao = ATRAS;
+                moveY(-velocidadeMax);
+                break;
+            case 'a':
+                this.orientacao = ESQUERDA;
+                moveX(-velocidadeMax);
+                break;
+            case 'd':
+                this.orientacao = DIREITA;
+                moveX(velocidadeMax);
+                break;
+            default:
+                throw new IllegalArgumentException("Tecla inválida: " + tecla);
         }
+    }
+
+    public void printPos() {
+        String orientacaoStr = orientacaoToString(this.orientacao);
+        System.out.println("Posição atual do Robô: X=" + this.posicaoX + ", Y=" + this.posicaoY +
+                ", Orientação: " + orientacaoStr);
     }
 
     @Override
@@ -92,13 +96,13 @@ public class RoboTransporte {
 
     private String orientacaoToString(int orientacao) {
         switch (orientacao) {
-            case 0:
+            case FRENTE:
                 return "Frente";
-            case 1:
+            case ATRAS:
                 return "Atrás";
-            case 2:
+            case ESQUERDA:
                 return "Esquerda";
-            case 3:
+            case DIREITA:
                 return "Direita";
             default:
                 return "Desconhecida";
@@ -114,6 +118,11 @@ public class RoboTransporte {
         RoboTransporte that = (RoboTransporte) obj;
         return Float.compare(that.posicaoX, posicaoX) == 0 &&
                 Float.compare(that.posicaoY, posicaoY) == 0 &&
-                nome.equals(that.nome);
+                orientacao == that.orientacao &&
+                nome.equals(that.nome) &&
+                Float.compare(that.peso, peso) == 0 &&
+                Float.compare(that.velocidadeMax, velocidadeMax) == 0 &&
+                Float.compare(that.pesoCargaMax, pesoCargaMax) == 0 &&
+                tipoTracao.equals(that.tipoTracao);
     }
 }

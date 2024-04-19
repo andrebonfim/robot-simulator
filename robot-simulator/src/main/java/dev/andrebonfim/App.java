@@ -1,14 +1,14 @@
 package dev.andrebonfim;
 
 import dev.andrebonfim.code.*;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
         Mundo2D mundo = new Mundo2D(100, 100);
         RoboTransporte robo = setupRobo();
         Caixa caixa1 = new Caixa("Item1", 1, 70, 70, 5.0f, 2, 2, 2);
-
-        executeMovementSequence(robo, mundo, caixa1);
+        executeRobotCommands(robo, mundo, caixa1);
     }
 
     private static RoboTransporte setupRobo() {
@@ -16,19 +16,36 @@ public class App {
         return new RoboTransporte("R-ATM", 10.0f, 50, 50);
     }
 
-    private static void executeMovementSequence(RoboTransporte robo, Mundo2D mundo, Caixa caixa) {
-        // Lógica de movimento e verificação de colisão
-        for (int i = 0; i < 4; i++) {
-            robo.setOrientacao((char) ('w' + i));
-            for (int j = 0; j <= 10; j++) {
-                float newX = robo.getPosicaoX() + (i % 2 == 0 ? j * 4 : 0);
-                float newY = robo.getPosicaoY() + (i % 2 != 0 ? j * 4 : 0);
-                if (newX >= 0 && newX <= mundo.getDimX() && newY >= 0 && newY <= mundo.getDimY()) {
-                    robo.move(newX, newY);
-                    System.out.println(robo); // Imprime o status após cada movimento
-                    checkCollision(robo, caixa);
+    private static void executeRobotCommands(RoboTransporte robo, Mundo2D mundo, Caixa caixa) {
+        Scanner scan = new Scanner(System.in);
+        String tecla;
+        boolean ok = false;
+        do {
+            try {
+                tecla = scan.next();
+                char orientacao = tecla.charAt(0);
+                if (orientacao == '0') {
+                    ok = true;
+                } else {
+                    executeMovementSequence(robo, mundo, caixa, orientacao);
+                    robo.printPos(); // Supondo que esta função imprime a posição atual do robô
                 }
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Valor errado");
+                scan.nextLine(); // Limpa o buffer do scanner para a próxima entrada
             }
+        } while (!ok);
+        scan.close();
+    }
+
+    private static void executeMovementSequence(RoboTransporte robo, Mundo2D mundo, Caixa caixa, char orientacao) {
+        // Lógica de movimento e verificação de colisão
+        robo.setOrientacao(orientacao);
+        float newX = robo.getPosicaoX() + (orientacao == 'w' ? -4 : orientacao == 's' ? 4 : 0);
+        float newY = robo.getPosicaoY() + (orientacao == 'a' ? -4 : orientacao == 'd' ? 4 : 0);
+        if (newX >= 0 && newX <= mundo.getDimX() && newY >= 0 && newY <= mundo.getDimY()) {
+            robo.move(newX, newY);
+            checkCollision(robo, caixa);
         }
     }
 

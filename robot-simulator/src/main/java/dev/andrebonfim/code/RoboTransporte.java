@@ -1,22 +1,35 @@
 package dev.andrebonfim.code;
 
+/**
+ * Representa um robô de transporte que pode mover-se em um espaço bidimensional
+ * e mudar sua orientação.
+ * Herda características básicas de Robo.
+ */
 public class RoboTransporte extends Robo {
-    static final int FRENTE = 0;
-    static final int ATRAS = 1;
-    static final int ESQUERDA = 2;
-    static final int DIREITA = 3;
-    private final float velocidadeMax = 5;
-    private final float pesoCargaMax = 20;
-    private final String tipoTracao = "esteira";
+    private final float velocidadeMax = 5; // Velocidade máxima que o robô pode se mover
+    private final float pesoCargaMax = 20; // Peso máximo de carga que o robô pode transportar
+    private final String tipoTracao = "esteira"; // Tipo de tração do robô
 
+    /**
+     * Construtor padrão do RoboTransporte que inicializa valores básicos.
+     */
     public RoboTransporte() {
         this.nome = "R-ATM";
         this.peso = 10;
         this.posicaoX = 50;
         this.posicaoY = 50;
-        this.orientacao = FRENTE;
+        this.orientacao = Orientacao.FRENTE;
     }
 
+    /**
+     * Construtor do RoboTransporte que permite especificação completa de suas
+     * propriedades.
+     * 
+     * @param nome Nome do robô.
+     * @param peso Peso do robô.
+     * @param posX Posição inicial X.
+     * @param posY Posição inicial Y.
+     */
     public RoboTransporte(String nome, float peso, float posX, float posY) {
         this.nome = nome;
         this.peso = peso;
@@ -24,6 +37,13 @@ public class RoboTransporte extends Robo {
         this.posicaoY = posY;
     }
 
+    /**
+     * Move o robô para a posição especificada.
+     * 
+     * @param x Nova posição X.
+     * @param y Nova posição Y.
+     * @throws IllegalArgumentException Se x ou y forem NaN ou infinitos.
+     */
     @Override
     public void move(float x, float y) {
         if (Float.isNaN(x) || Float.isNaN(y) || Float.isInfinite(x) || Float.isInfinite(y)) {
@@ -33,6 +53,12 @@ public class RoboTransporte extends Robo {
         this.posicaoY = y;
     }
 
+    /**
+     * Move o robô na direção X pela distância especificada.
+     * 
+     * @param dist Distância para mover na direção X.
+     * @throws IllegalArgumentException Se a distância for NaN ou infinita.
+     */
     @Override
     public void moveX(float dist) {
         if (Float.isNaN(dist) || Float.isInfinite(dist)) {
@@ -41,6 +67,12 @@ public class RoboTransporte extends Robo {
         this.posicaoX += dist;
     }
 
+    /**
+     * Move o robô na direção Y pela distância especificada.
+     * 
+     * @param dist Distância para mover na direção Y.
+     * @throws IllegalArgumentException Se a distância for NaN ou infinita.
+     */
     @Override
     public void moveY(float dist) {
         if (Float.isNaN(dist) || Float.isInfinite(dist)) {
@@ -49,22 +81,28 @@ public class RoboTransporte extends Robo {
         this.posicaoY += dist;
     }
 
+    /**
+     * Define a orientação do robô com base na tecla de comando inserida.
+     * 
+     * @param tecla Tecla de comando ('w', 's', 'a', 'd').
+     * @throws IllegalArgumentException Se a tecla for inválida.
+     */
     public void setOrientacao(char tecla) {
         switch (tecla) {
             case 'w':
-                this.orientacao = FRENTE;
+                super.orientacao = Orientacao.FRENTE;
                 moveY(velocidadeMax);
                 break;
             case 's':
-                this.orientacao = ATRAS;
+                super.orientacao = Orientacao.ATRAS;
                 moveY(-velocidadeMax);
                 break;
             case 'a':
-                this.orientacao = ESQUERDA;
+                super.orientacao = Orientacao.ESQUERDA;
                 moveX(-velocidadeMax);
                 break;
             case 'd':
-                this.orientacao = DIREITA;
+                super.orientacao = Orientacao.DIREITA;
                 moveX(velocidadeMax);
                 break;
             default:
@@ -72,6 +110,23 @@ public class RoboTransporte extends Robo {
         }
     }
 
+    /**
+     * Realiza uma série de movimentos programados.
+     * 
+     * @param moves Array de comandos de movimento.
+     */
+    public void movimentosAgendados(String... moves) {
+        for (String tecla : moves) {
+            if (!tecla.equals("--move")) {
+                setOrientacao(tecla.charAt(0));
+                printPos();
+            }
+        }
+    }
+
+    /**
+     * Imprime a posição atual e orientação do robô.
+     */
     public void printPos() {
         String orientacaoStr = orientacaoToString(this.orientacao);
         System.out.println("Posição atual do Robô: X=" + this.posicaoX + ", Y=" + this.posicaoY +
@@ -94,7 +149,13 @@ public class RoboTransporte extends Robo {
                 tipoTracao);
     }
 
-    private String orientacaoToString(int orientacao) {
+    /**
+     * Converte a orientação do robô para uma string legível.
+     * 
+     * @param orientacao Orientação do robô.
+     * @return String representando a orientação.
+     */
+    private String orientacaoToString(Orientacao orientacao) {
         switch (orientacao) {
             case FRENTE:
                 return "Frente";

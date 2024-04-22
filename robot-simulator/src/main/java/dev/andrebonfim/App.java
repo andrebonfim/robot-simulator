@@ -1,94 +1,142 @@
-/**
- * Representa a aplicação principal que inicializa o mundo e o robô de transporte.
- * @since 1.0
- * @version $Revision: 1.1 $
- * @author andrebonfim
- */
 package dev.andrebonfim;
 
 import dev.andrebonfim.code.*;
 import java.util.Scanner;
+import java.util.Arrays;
 
+/**
+ * Esta classe serve como a entrada principal para o simulador de robô. Ela
+ * oferece uma interface de linha de comando
+ * para interagir com o simulador, permitindo que o usuário execute comandos
+ * para controlar o robô ou obter informações
+ * sobre o aplicativo.
+ * <p>
+ * Os comandos disponíveis incluem:
+ * <ul>
+ * <li>--author ou -a: Exibe o autor do programa.</li>
+ * <li>--version ou -v: Exibe a versão do programa.</li>
+ * <li>--help ou -h: Exibe a ajuda sobre como usar o programa.</li>
+ * <li>--commands ou -c: Lista todos os comandos disponíveis para movimentação
+ * do robô.</li>
+ * <li>--move ou -m seguido por comandos: Executa uma sequência de comandos de
+ * movimentação.</li>
+ * </ul>
+ * Além disso, o programa pode ser executado em um modo interativo onde comandos
+ * podem ser digitados sequencialmente.
+ * </p>
+ * 
+ * @author André Luis Bonfim
+ * @version 2.0
+ */
 public class App {
+
     /**
-     * Método principal que configura e executa comandos do robô dentro de um
-     * ambiente 2D.
+     * Inicia o aplicativo. Dependendo dos argumentos passados, o aplicativo pode
+     * responder informações ou
+     * executar comandos de movimentação do robô.
      * 
-     * @param args Argumentos de linha de comando (não utilizados).
+     * @param args argumentos de linha de comando usados para controlar o programa.
      */
     public static void main(String[] args) {
-        Mundo2D mundo = new Mundo2D(100, 100);
-        RoboTransporte robo = setupRobo();
-        Caixa caixa1 = new Caixa("Item1", 1, 70, 70, 5.0f, 2, 2, 2);
-        executeRobotCommands(robo, mundo, caixa1);
+        if (args.length > 0) {
+            processCommandLineArguments(args);
+        } else {
+            runInteractiveMode();
+        }
     }
 
     /**
-     * Configura o robô com características iniciais.
+     * Processa argumentos de linha de comando para executar ações específicas.
      * 
-     * @return Uma nova instância de RoboTransporte configurada.
+     * @param args argumentos de linha de comando fornecidos ao programa.
      */
-    private static RoboTransporte setupRobo() {
-        return new RoboTransporte("R-ATM", 10.0f, 50, 50);
-    }
-
-    /**
-     * Executa uma série de comandos de entrada do usuário para movimentar o robô.
-     * Processa comandos até que o usuário decida terminar a execução.
-     * 
-     * @param robo  O robô a ser comandado.
-     * @param mundo O ambiente onde o robô opera.
-     * @param caixa A caixa no mundo para interagir.
-     */
-    private static void executeRobotCommands(RoboTransporte robo, Mundo2D mundo, Caixa caixa) {
-        Scanner scan = new Scanner(System.in);
-        String tecla;
-        boolean ok = false;
-        do {
-            try {
-                tecla = scan.next();
-                char orientacao = tecla.charAt(0);
-                if (orientacao == '0') {
-                    ok = true;
+    private static void processCommandLineArguments(String[] args) {
+        String command = args[0].toLowerCase();
+        switch (command) {
+            case "--author":
+            case "-a":
+                System.out.println("Autor: André Luis Bonfim");
+                break;
+            case "--version":
+            case "-v":
+                System.out.println("Versão: 2.0");
+                break;
+            case "--help":
+            case "-h":
+                printHelp();
+                break;
+            case "--commands":
+            case "-c":
+                printSupportedCommands();
+                break;
+            case "--move":
+            case "-m":
+                RoboTransporte robo = new RoboTransporte();
+                System.out.println("Execução com movimentos agendados:");
+                if (args.length > 1) {
+                    String[] movimentos = Arrays.copyOfRange(args, 1, args.length); // Exclui o primeiro argumento "-m"
+                    robo.movimentosAgendados(movimentos);
                 } else {
-                    executeMovementSequence(robo, mundo, caixa, orientacao);
-                    robo.printPos(); // Supõe-se que esta função imprime a posição atual do robô
+                    System.out.println("Nenhum comando de movimento fornecido após '--move'.");
                 }
-            } catch (IllegalArgumentException ex) {
-                System.out.println("Valor errado");
-                scan.nextLine(); // Limpa o buffer do scanner para a próxima entrada
+                break;
+            default:
+                System.out.println("Argumento não válido: " + args[0]);
+                break;
+        }
+        System.exit(0);
+    }
+
+    /**
+     * Exibe a ajuda sobre como usar o aplicativo, detalhando todos os comandos
+     * disponíveis.
+     */
+    private static void printHelp() {
+        System.out.println("Ajuda do Simulador de Robô:");
+        System.out.println("\t--author, -a: Mostra informações do autor.");
+        System.out.println("\t--version, -v: Mostra a versão do programa.");
+        System.out.println("\t--help, -h: Mostra esta ajuda.");
+        System.out.println("\t--commands, -c: Lista os comandos suportados pelo programa.");
+        System.out.println("\t--move <commands>, -m <commands>: Executa uma sequência de movimentos.");
+    }
+
+    /**
+     * Lista todos os comandos suportados pelo simulador de robô, facilitando a
+     * interação do usuário com o programa.
+     */
+    private static void printSupportedCommands() {
+        System.out.println("Comandos suportados:");
+        System.out.println("\tw: move para cima");
+        System.out.println("\ta: move para esquerda");
+        System.out.println("\ts: move para baixo");
+        System.out.println("\td: move para direita");
+        System.out.println("\t0: sair da aplicação");
+    }
+
+    /**
+     * Executa o modo interativo do simulador de robô, onde o usuário pode digitar
+     * comandos para controlar o robô em tempo real.
+     */
+    private static void runInteractiveMode() {
+        RoboTransporte robo = new RoboTransporte();
+        System.out.println("Modo interativo. Digite comandos para mover o robô (w, a, s, d) ou '0' para sair:");
+        try (Scanner scan = new Scanner(System.in)) {
+            String tecla;
+            boolean quit = false;
+            while (!quit) {
+                tecla = scan.next();
+                if (tecla.charAt(0) == '0') {
+                    quit = true;
+                } else {
+                    try {
+                        robo.setOrientacao(tecla.charAt(0));
+                        robo.printPos();
+                    } catch (IllegalArgumentException ex) {
+                        System.out.println("Comando inválido: " + tecla);
+                    }
+                }
             }
-        } while (!ok);
-        scan.close();
-    }
-
-    /**
-     * Executa a sequência de movimento do robô baseada na orientação fornecida.
-     * 
-     * @param robo       O robô que será movido.
-     * @param mundo      O ambiente onde o robô se movimenta.
-     * @param caixa      A caixa com a qual o robô pode colidir.
-     * @param orientacao A direção do movimento ('w', 'a', 's', 'd').
-     */
-    private static void executeMovementSequence(RoboTransporte robo, Mundo2D mundo, Caixa caixa, char orientacao) {
-        robo.setOrientacao(orientacao);
-        float newX = robo.getPosicaoX() + (orientacao == 'w' ? -4 : orientacao == 's' ? 4 : 0);
-        float newY = robo.getPosicaoY() + (orientacao == 'a' ? -4 : orientacao == 'd' ? 4 : 0);
-        if (newX >= 0 && newX <= mundo.getDimX() && newY >= 0 && newY <= mundo.getDimY()) {
-            robo.move(newX, newY);
-            checkCollision(robo, caixa);
         }
-    }
-
-    /**
-     * Verifica se ocorre uma colisão entre o robô e a caixa.
-     * 
-     * @param robo  O robô que pode colidir com a caixa.
-     * @param caixa A caixa que pode ser colidida pelo robô.
-     */
-    private static void checkCollision(RoboTransporte robo, Caixa caixa) {
-        if (robo.getPosicaoX() == caixa.getPosX() && robo.getPosicaoY() == caixa.getPosY()) {
-            System.out.println("Colisão com a caixa: " + caixa.getNomeItem());
-        }
+        System.out.println("Saindo do modo interativo.");
     }
 }

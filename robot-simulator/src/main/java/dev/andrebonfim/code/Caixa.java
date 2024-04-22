@@ -1,5 +1,10 @@
 package dev.andrebonfim.code;
 
+/**
+ * Classe que representa uma caixa física que pode conter múltiplos itens do
+ * mesmo tipo.
+ * Esta caixa tem dimensões específicas e uma localização no espaço 2D.
+ */
 public class Caixa extends CaixaIdeia {
   private int qtdItem;
   private int posX;
@@ -8,6 +13,18 @@ public class Caixa extends CaixaIdeia {
   private final float largura;
   private final float altura;
 
+  /**
+   * Constrói uma nova caixa com detalhes específicos.
+   * 
+   * @param nomeItem    Nome do item na caixa.
+   * @param qtdItem     Quantidade de itens.
+   * @param posX        Posição X da caixa.
+   * @param posY        Posição Y da caixa.
+   * @param peso        Peso total da caixa.
+   * @param comprimento Comprimento da caixa.
+   * @param largura     Largura da caixa.
+   * @param altura      Altura da caixa.
+   */
   public Caixa(String nomeItem, int qtdItem, int posX, int posY, float peso,
       float comprimento, float largura, float altura) {
     super(nomeItem, peso);
@@ -50,5 +67,4 @@ public class Caixa extends CaixaIdeia {
         ", comprimento=" + comprimento + ", largura=" + largura +
         ", altura=" + altura + "]";
   }
-
 }

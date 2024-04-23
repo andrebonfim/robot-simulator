@@ -1,38 +1,43 @@
 package dev.andrebonfim.code;
 
 /**
- * Representa um espaço bidimensional definido por suas dimensões X e Y.
+ * Representa um espaço bidimensional no qual os robôs e outros objetos se
+ * movimentam.
+ * Esta classe fornece um contexto espacial definido por dimensões X e Y.
+ * 
+ * @author André Luis Bonfim
+ * @version 3.0
  */
 public class Mundo2D {
-  final int DIM_X;
-  final int DIM_Y;
+  private int dimX; // Dimensão horizontal do mundo.
+  private int dimY; // Dimensão vertical do mundo.
 
   /**
-   * Constrói um novo mundo 2D com as dimensões especificadas.
+   * Constrói um novo espaço 2D com as dimensões especificadas.
    * 
-   * @param dimX Dimensão X do mundo.
-   * @param dimY Dimensão Y do mundo.
+   * @param dimX A dimensão horizontal do mundo.
+   * @param dimY A dimensão vertical do mundo.
    */
   public Mundo2D(int dimX, int dimY) {
-    this.DIM_X = dimX;
-    this.DIM_Y = dimY;
+    this.dimX = dimX;
+    this.dimY = dimY;
   }
 
   /**
-   * Retorna a dimensão X do mundo.
+   * Retorna a dimensão horizontal do mundo.
    * 
-   * @return Dimensão X como inteiro.
+   * @return A dimensão horizontal.
    */
   public int getDimX() {
-    return DIM_X;
+    return dimX;
   }
 
   /**
-   * Retorna a dimensão Y do mundo.
+   * Retorna a dimensão vertical do mundo.
    * 
-   * @return Dimensão Y como inteiro.
+   * @return A dimensão vertical.
    */
   public int getDimY() {
-    return DIM_Y;
+    return dimY;
   }
 }

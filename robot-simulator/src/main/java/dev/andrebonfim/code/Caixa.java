@@ -1,34 +1,34 @@
 package dev.andrebonfim.code;
 
 /**
- * Classe que representa uma caixa física que pode conter múltiplos itens do
- * mesmo tipo.
- * Esta caixa tem dimensões específicas e uma localização no espaço 2D.
+ * Classe que representa uma caixa física no ambiente simulado.
+ * Esta caixa tem dimensões e uma localização específica, além de um conteúdo
+ * definido.
+ * 
+ * @author André Luis Bonfim
+ * @version 3.0
  */
 public class Caixa extends CaixaIdeia {
-  private int qtdItem;
-  private int posX;
-  private int posY;
-  private final float comprimento;
-  private final float largura;
-  private final float altura;
+  private int posX; // Posição X da caixa no ambiente
+  private int posY; // Posição Y da caixa no ambiente
+  private int comprimento; // Comprimento da caixa
+  private int largura; // Largura da caixa
+  private int altura; // Altura da caixa
 
   /**
-   * Constrói uma nova caixa com detalhes específicos.
+   * Constrói uma nova caixa com especificações completas incluindo localização e
+   * dimensões.
    * 
-   * @param nomeItem    Nome do item na caixa.
-   * @param qtdItem     Quantidade de itens.
-   * @param posX        Posição X da caixa.
-   * @param posY        Posição Y da caixa.
-   * @param peso        Peso total da caixa.
+   * @param nomeItem    Nome do item contido na caixa.
+   * @param peso        Peso do item contido na caixa.
+   * @param posX        Posição X da caixa no ambiente.
+   * @param posY        Posição Y da caixa no ambiente.
    * @param comprimento Comprimento da caixa.
    * @param largura     Largura da caixa.
    * @param altura      Altura da caixa.
    */
-  public Caixa(String nomeItem, int qtdItem, int posX, int posY, float peso,
-      float comprimento, float largura, float altura) {
+  public Caixa(String nomeItem, int peso, int posX, int posY, int comprimento, int largura, int altura) {
     super(nomeItem, peso);
-    this.qtdItem = qtdItem;
     this.posX = posX;
     this.posY = posY;
     this.comprimento = comprimento;
@@ -36,35 +36,48 @@ public class Caixa extends CaixaIdeia {
     this.altura = altura;
   }
 
-  public int getQtdItem() {
-    return qtdItem;
-  }
-
-  public void setQtdItem(int qtdItem) {
-    this.qtdItem = qtdItem;
-  }
-
+  /**
+   * Retorna a posição X da caixa no ambiente.
+   * 
+   * @return A posição X da caixa.
+   */
   public int getPosX() {
     return posX;
   }
 
-  public void setPosX(int posX) {
-    this.posX = posX;
-  }
-
+  /**
+   * Retorna a posição Y da caixa no ambiente.
+   * 
+   * @return A posição Y da caixa.
+   */
   public int getPosY() {
     return posY;
   }
 
-  public void setPosY(int posY) {
-    this.posY = posY;
+  /**
+   * Retorna o comprimento da caixa.
+   * 
+   * @return O comprimento da caixa.
+   */
+  public int getComprimento() {
+    return comprimento;
   }
 
-  @Override
-  public String toString() {
-    return "Caixa[nomeItem=" + nomeItem + ", qtdItem=" + qtdItem +
-        ", posX=" + posX + ", posY=" + posY + ", peso=" + peso +
-        ", comprimento=" + comprimento + ", largura=" + largura +
-        ", altura=" + altura + "]";
+  /**
+   * Retorna a largura da caixa.
+   * 
+   * @return A largura da caixa.
+   */
+  public int getLargura() {
+    return largura;
+  }
+
+  /**
+   * Retorna a altura da caixa.
+   * 
+   * @return A altura da caixa.
+   */
+  public int getAltura() {
+    return altura;
   }
 }

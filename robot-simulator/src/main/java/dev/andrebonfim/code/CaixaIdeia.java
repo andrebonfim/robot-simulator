@@ -8,7 +8,7 @@ package dev.andrebonfim.code;
  * simulações ou aplicações que requerem o manejo de objetos físicos.
  *
  * @author André Luis Bonfim
- * @version 4.0
+ * @version 4.1
  */
 public abstract class CaixaIdeia {
   protected int posX; // Posição X da caixa no ambiente

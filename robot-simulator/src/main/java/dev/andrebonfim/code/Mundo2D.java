@@ -8,7 +8,7 @@ package dev.andrebonfim.code;
  * bidimensional.
  * 
  * @author André Luis Bonfim
- * @version 4.0
+ * @version 4.1
  */
 public class Mundo2D {
 

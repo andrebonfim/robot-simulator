@@ -7,7 +7,7 @@ package dev.andrebonfim.code;
  * armazenamento de itens, como nome e quantidade de itens na caixa.
  * 
  * @author André Luis Bonfim
- * @version 4.0
+ * @version 4.1
  */
 public class Caixa extends CaixaIdeia {
 

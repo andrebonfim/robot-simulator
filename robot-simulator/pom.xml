@@ -3,8 +3,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.seuprojeto</groupId>
-  <artifactId>hello-world-javafx</artifactId>
+  <groupId>dev.andrebonfim</groupId>
+  <artifactId>robot-simulator</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
@@ -14,9 +14,20 @@
 
   <dependencies>
     <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.23</version>
+    </dependency>
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>22.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>22.0.1</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -42,6 +53,13 @@
         <version>3.0.0</version>
         <configuration>
           <mainClass>dev.andrebonfim.App</mainClass>
+          <executable>java</executable>
+          <arguments>
+            <argument>--module-path</argument>
+            <argument>/usr/lib</argument>
+            <argument>--add-modules</argument>
+            <argument>javafx.controls,javafx.fxml</argument>
+          </arguments>
         </configuration>
       </plugin>
       <plugin>

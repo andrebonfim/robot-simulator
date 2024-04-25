@@ -1,6 +1,10 @@
 package dev.andrebonfim;
 
+import java.sql.Connection;
+
 import dev.andrebonfim.code.*;
+import dev.andrebonfim.dao.Consultas;
+import dev.andrebonfim.database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,9 +18,26 @@ import javafx.stage.Stage;
  * Utiliza JavaFX para renderizar o ambiente e o robô em um galpão.
  * 
  * @author André Luis Bonfim
- * @version 4.0
+ * @version 4.1
  */
 public class App extends Application {
+
+    /**
+     * Instância de DatabaseConnection para gerenciar a conexão com o banco de
+     * dados.
+     */
+    private final DatabaseConnection conBD = new DatabaseConnection();
+
+    /**
+     * Conexão ativa com o banco de dados, obtida através de
+     * {@link DatabaseConnection}.
+     */
+    private final Connection connection = conBD.getConexao();
+
+    /**
+     * Instância de Consultas para realizar operações de inserção no banco de dados.
+     */
+    private Consultas consultas = new Consultas();
 
     private static final String IMG_FUNDO = "/img/galpao.png";
     private static final String IMG_FRENTE = "/img/robo1.png";
@@ -170,6 +191,7 @@ public class App extends Application {
                 if (robo.avaliaPosicao(robo.getPosicaoX(), newPos)) {
                     robo.setPosicaoY(newPos);
                 }
+                consultas.inserirPos(connection, robo.getPosicaoX(), robo.getPosicaoY());
                 break;
             case DOWN:
                 viewRobo.setImage(imgRoboFrente);
@@ -177,6 +199,7 @@ public class App extends Application {
                 if (robo.avaliaPosicao(robo.getPosicaoX(), newPos)) {
                     robo.setPosicaoY(newPos);
                 }
+                consultas.inserirPos(connection, robo.getPosicaoX(), robo.getPosicaoY());
                 break;
             case LEFT:
                 viewRobo.setImage(imgRoboEsq);
@@ -184,6 +207,7 @@ public class App extends Application {
                 if (robo.avaliaPosicao(newPos, robo.getPosicaoY())) {
                     robo.setPosicaoX(newPos);
                 }
+                consultas.inserirPos(connection, robo.getPosicaoX(), robo.getPosicaoY());
                 break;
             case RIGHT:
                 viewRobo.setImage(imgRoboDir);
@@ -191,6 +215,7 @@ public class App extends Application {
                 if (robo.avaliaPosicao(newPos, robo.getPosicaoY())) {
                     robo.setPosicaoX(newPos);
                 }
+                consultas.inserirPos(connection, robo.getPosicaoX(), robo.getPosicaoY());
                 break;
             default:
                 // Não faz nada se a tecla não corresponder a uma direção.

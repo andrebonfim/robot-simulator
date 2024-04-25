@@ -7,7 +7,7 @@ package dev.andrebonfim.code;
  * orientado ou se move.
  *
  * @author André Luis Bonfim
- * @version 4.0
+ * @version 4.1
  */
 public enum Orientacao {
   FRENTE, // Representa a orientação para frente

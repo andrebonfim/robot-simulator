@@ -1,43 +1,93 @@
 package dev.andrebonfim.code;
 
 /**
- * Classe abstrata que representa a ideia de uma caixa que pode conter itens.
- * Define propriedades comuns a todas as caixas, como o nome do item e seu peso.
- * Serve como superclasse para diferentes tipos de caixas específicas.
- * 
+ * Classe abstrata que modela a ideia de uma caixa. Esta classe define as
+ * características
+ * fundamentais de uma caixa, como posição, peso e dimensões, que podem ser
+ * utilizadas em
+ * simulações ou aplicações que requerem o manejo de objetos físicos.
+ *
  * @author André Luis Bonfim
- * @version 3.0
+ * @version 4.0
  */
 public abstract class CaixaIdeia {
-  protected String nomeItem; // Nome do item contido na caixa.
-  protected float peso; // Peso do item contido na caixa.
+  protected int posX; // Posição X da caixa no ambiente
+  protected int posY; // Posição Y da caixa no ambiente
+  protected float peso; // Peso da caixa
+  protected final float comprimento; // Comprimento da caixa
+  protected final float largura; // Largura da caixa
+  protected final float altura; // Altura da caixa
 
   /**
-   * Construtor que inicializa uma caixa com um nome de item e peso especificados.
-   * 
-   * @param nomeItem Nome do item contido na caixa.
-   * @param peso     Peso do item contido na caixa.
+   * Constrói uma instância de CaixaIdeia com especificações detalhadas.
+   *
+   * @param posX        Coordenada X da caixa.
+   * @param posY        Coordenada Y da caixa.
+   * @param peso        Peso da caixa.
+   * @param comprimento Comprimento da caixa.
+   * @param largura     Largura da caixa.
+   * @param altura      Altura da caixa.
    */
-  public CaixaIdeia(String nomeItem, float peso) {
-    this.nomeItem = nomeItem;
+  public CaixaIdeia(int posX, int posY, float peso, float comprimento, float largura, float altura) {
+    this.posX = posX;
+    this.posY = posY;
     this.peso = peso;
+    this.comprimento = comprimento;
+    this.largura = largura;
+    this.altura = altura;
   }
 
   /**
-   * Retorna o nome do item contido na caixa.
-   * 
-   * @return Nome do item.
+   * Retorna a posição X da caixa.
+   *
+   * @return A posição X atual da caixa.
    */
-  public String getNomeItem() {
-    return nomeItem;
+  public int getPosX() {
+    return posX;
   }
 
   /**
-   * Retorna o peso do item contido na caixa.
-   * 
-   * @return Peso do item.
+   * Define a posição X da caixa.
+   *
+   * @param posX A nova posição X da caixa.
+   */
+  public void setPosX(int posX) {
+    this.posX = posX;
+  }
+
+  /**
+   * Retorna a posição Y da caixa.
+   *
+   * @return A posição Y atual da caixa.
+   */
+  public int getPosY() {
+    return posY;
+  }
+
+  /**
+   * Define a posição Y da caixa.
+   *
+   * @param posY A nova posição Y da caixa.
+   */
+  public void setPosY(int posY) {
+    this.posY = posY;
+  }
+
+  /**
+   * Retorna o peso da caixa.
+   *
+   * @return O peso atual da caixa.
    */
   public float getPeso() {
     return peso;
+  }
+
+  /**
+   * Define o peso da caixa.
+   *
+   * @param peso O novo peso da caixa.
+   */
+  public void setPeso(float peso) {
+    this.peso = peso;
   }
 }

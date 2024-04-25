@@ -1,83 +1,57 @@
 package dev.andrebonfim.code;
 
 /**
- * Classe que representa uma caixa física no ambiente simulado.
- * Esta caixa tem dimensões e uma localização específica, além de um conteúdo
- * definido.
+ * Classe que modela uma caixa utilizada para armazenar e transportar itens.
+ * Esta classe
+ * estende CaixaIdeia para adicionar funcionalidades específicas relacionadas ao
+ * armazenamento de itens, como nome e quantidade de itens na caixa.
  * 
  * @author André Luis Bonfim
- * @version 3.0
+ * @version 4.0
  */
 public class Caixa extends CaixaIdeia {
-  private int posX; // Posição X da caixa no ambiente
-  private int posY; // Posição Y da caixa no ambiente
-  private int comprimento; // Comprimento da caixa
-  private int largura; // Largura da caixa
-  private int altura; // Altura da caixa
+
+  public String nomeItem; // Nome do item contido na caixa
+  public int qtdItem; // Quantidade de itens contidos na caixa
 
   /**
-   * Constrói uma nova caixa com especificações completas incluindo localização e
-   * dimensões.
-   * 
-   * @param nomeItem    Nome do item contido na caixa.
-   * @param peso        Peso do item contido na caixa.
+   * Construtor da Caixa que inicializa uma nova caixa com os detalhes do item,
+   * quantidade de itens e especificações físicas da caixa.
+   *
+   * @param nomeItem    Nome do item que está na caixa.
+   * @param qtdItem     Quantidade de itens que está na caixa.
    * @param posX        Posição X da caixa no ambiente.
    * @param posY        Posição Y da caixa no ambiente.
+   * @param peso        Peso da caixa.
    * @param comprimento Comprimento da caixa.
    * @param largura     Largura da caixa.
    * @param altura      Altura da caixa.
    */
-  public Caixa(String nomeItem, int peso, int posX, int posY, int comprimento, int largura, int altura) {
-    super(nomeItem, peso);
-    this.posX = posX;
-    this.posY = posY;
-    this.comprimento = comprimento;
-    this.largura = largura;
-    this.altura = altura;
+  public Caixa(String nomeItem, int qtdItem, int posX, int posY, float peso,
+      float comprimento, float largura, float altura) {
+    super(posX, posY, peso, comprimento, largura, altura);
+    this.nomeItem = nomeItem;
+    this.qtdItem = qtdItem;
   }
 
   /**
-   * Retorna a posição X da caixa no ambiente.
-   * 
-   * @return A posição X da caixa.
+   * Fornece uma representação em string do estado atual da caixa, incluindo o
+   * nome do item e
+   * a quantidade de itens.
+   *
+   * @return Uma string que representa o estado atual da caixa.
    */
-  public int getPosX() {
-    return posX;
-  }
-
-  /**
-   * Retorna a posição Y da caixa no ambiente.
-   * 
-   * @return A posição Y da caixa.
-   */
-  public int getPosY() {
-    return posY;
-  }
-
-  /**
-   * Retorna o comprimento da caixa.
-   * 
-   * @return O comprimento da caixa.
-   */
-  public int getComprimento() {
-    return comprimento;
-  }
-
-  /**
-   * Retorna a largura da caixa.
-   * 
-   * @return A largura da caixa.
-   */
-  public int getLargura() {
-    return largura;
-  }
-
-  /**
-   * Retorna a altura da caixa.
-   * 
-   * @return A altura da caixa.
-   */
-  public int getAltura() {
-    return altura;
+  @Override
+  public String toString() {
+    return "Caixa{" +
+        "nomeItem='" + nomeItem + '\'' +
+        ", qtdItem=" + qtdItem +
+        ", posX=" + posX +
+        ", posY=" + posY +
+        ", peso=" + peso +
+        ", comprimento=" + comprimento +
+        ", largura=" + largura +
+        ", altura=" + altura +
+        '}';
   }
 }

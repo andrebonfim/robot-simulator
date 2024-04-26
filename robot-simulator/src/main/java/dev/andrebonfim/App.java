@@ -6,6 +6,7 @@ import dev.andrebonfim.code.*;
 import dev.andrebonfim.dao.Consultas;
 import dev.andrebonfim.database.DatabaseConnection;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -16,6 +17,10 @@ import javafx.stage.Stage;
 /**
  * Classe principal que inicia a aplicação de simulação robótica.
  * Utiliza JavaFX para renderizar o ambiente e o robô em um galpão.
+ * Esta aplicação simula o movimento de um robô transportador em um ambiente de
+ * armazém,
+ * permitindo o controle do robô através do teclado e a visualização de objetos
+ * como caixas e carregadores.
  * 
  * @author André Luis Bonfim
  * @version 4.1
@@ -39,6 +44,13 @@ public class App extends Application {
      */
     private Consultas consultas = new Consultas();
 
+    /**
+     * Thread responsável por gerenciar o carregamento e a execução de tarefas em
+     * segundo plano.
+     */
+    private Thread threadCarregador;
+
+    // Descrições das imagens utilizadas na aplicação.
     private static final String IMG_FUNDO = "/img/galpao.png";
     private static final String IMG_FRENTE = "/img/robo1.png";
     private static final String IMG_COSTAS = "/img/robo2.png";
@@ -47,7 +59,9 @@ public class App extends Application {
     private static final String IMG_BOX_LVR = "/img/box.png";
     private static final String IMG_BOX_HD = "/img/box2.png";
     private static final String IMG_BOX_PRT = "/img/box3.png";
+    private final String IMG_CARREGADOR = "/img/carregador.png";
 
+    // Instâncias de Image para cada recurso visual utilizado na aplicação.
     private Image imgFundo = new Image(getClass().getResourceAsStream(IMG_FUNDO));
     private Image imgRoboFrente = new Image(getClass().getResourceAsStream(IMG_FRENTE));
     private Image imgRoboCostas = new Image(getClass().getResourceAsStream(IMG_COSTAS));
@@ -56,15 +70,20 @@ public class App extends Application {
     private Image imgBoxLvr = new Image(getClass().getResourceAsStream(IMG_BOX_LVR));
     private Image imgBoxHd = new Image(getClass().getResourceAsStream(IMG_BOX_HD));
     private Image imgBoxPrt = new Image(getClass().getResourceAsStream(IMG_BOX_PRT));
+    private final Image imgCarregador = new Image(getClass().getResourceAsStream(IMG_CARREGADOR));
 
+    // Instâncias de ImageView para exibição das imagens na cena.
     private ImageView viewFundo = new ImageView(imgFundo);
     private ImageView viewRobo = new ImageView(imgRoboFrente);
+    private final ImageView viewCarregador = new ImageView(imgCarregador);
     private ImageView[] viewBoxLvr = new ImageView[3];
     private ImageView[] viewBoxPrt = new ImageView[3];
     private ImageView[][] viewBoxHd = new ImageView[2][3];
 
+    // Objetos do mundo 2D, incluindo o robô e caixas.
     private Mundo2D mundo = new Mundo2D(600, 400);
     private static final RoboTransporte robo = new RoboTransporte(32, 300);
+    private final Carregador carregador = new Carregador(250, 270, viewCarregador);
     private Caixa[] caixaLvr = new Caixa[3];
     private Caixa[] caixaPrt = new Caixa[3];
     private Caixa[][] caixaHd = new Caixa[2][3];
@@ -81,14 +100,27 @@ public class App extends Application {
     @Override
     public void start(Stage janela) {
         setupScene(janela);
+
+        // Configura a ação de fechamento da janela para interromper a thread e sair da
+        // aplicação.
+        janela.setOnCloseRequest(event -> {
+            if (threadCarregador != null) {
+                threadCarregador.interrupt();
+            }
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     /**
-     * Configura e exibe a cena principal da aplicação.
+     * Configura e exibe a cena principal da aplicação, incluindo a inicialização de
+     * objetos e a configuração do palco.
      * 
      * @param janela Palco principal onde a cena será exibida.
      */
     private void setupScene(Stage janela) {
+        Thread threadCarregador = new Thread(carregador);
+        threadCarregador.start();
         Group grupo = new Group(viewFundo);
         initializeObjects();
         updateRobotPosition();
@@ -132,6 +164,7 @@ public class App extends Application {
      */
     private void addObjectsToGroup(Group grupo) {
         grupo.getChildren().add(viewRobo);
+        grupo.getChildren().add(viewCarregador);
         for (ImageView view : viewBoxLvr) {
             grupo.getChildren().add(view);
         }
